@@ -3,23 +3,10 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "dist": "electron-builder"
-  },
-  "build": {
-    "appId": "com.example.lanchat",
-    "productName": "LAN Chat",
-    "mac": {
-      "target": ["dmg", "zip"]
-    },
-    "win": {
-      "target": ["nsis", "zip"]
-    }
-  },
-  "dependencies": {
-    "electron": "^31.0.0"
+    "start": "electron ."
   },
   "devDependencies": {
-    "electron-builder": "^24.0.0"
+    "electron-builder": "^26.0.12",
+    "electron": "^31.0.0"
   }
 }
