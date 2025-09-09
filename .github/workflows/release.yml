@@ -3,13 +3,13 @@ name: Build and Release
 on:
   push:
     tags:
-      - "v*.*.*"   # Trigger on tag pushes like v1.0.0
+      - "v*.*.*"   # 触发条件：打 tag 时（如 v1.0.0）
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]  # Run on both macOS and Windows
+        os: [macos-latest, windows-latest]  # 在 macOS + Windows 各跑一遍
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -27,7 +27,7 @@ jobs:
       - name: Build app
         run: npm run dist
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -48,38 +48,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/**/*   # Include all files in the dist directory
+          files: dist/**/*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # Separate macOS signing job
-  macos-signing:
-    needs: build
-    runs-on: macos-latest # Now it's directly macOS, no matrix usage
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Setup Apple Developer Certificate
-        run: |
-          mkdir -p ~/.electron-builder/certs
-          echo "${{ secrets.APPLE_CERTIFICATE }}" > ~/.electron-builder/certs/certificate.p12
-          echo "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" > ~/.electron-builder/certs/certificate_password.txt
-        env:
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-
-      - name: Build Electron app for macOS
-        run: npm run dist -- --mac --publish never
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ELECTRON_BUILDER_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
