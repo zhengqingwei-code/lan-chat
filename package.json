@@ -9,5 +9,14 @@
   "devDependencies": {
     "electron-builder": "^26.0.12",
     "electron": "^31.0.0"
+  },
+  "build": {
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    }
   }
 }
